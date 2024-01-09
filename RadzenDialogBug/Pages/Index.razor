@@ -1,0 +1,34 @@
+﻿@page "/"
+@inject DialogService DialogService
+
+<RadzenButton ButtonStyle="ButtonStyle.Primary" Text="(1st step) Click me" Click="OpenInitialDialog" />
+
+@code {
+    private async Task OpenInitialDialog()
+    {
+        await DialogService.OpenAsync("Parent dialog", ds =>
+    @<RadzenCard>
+        <RadzenButton Text="(4th step) Open nested dialog" Click="OpenNestedDialog" />
+        <RadzenTabs TabPosition="TabPosition.Top">
+            <Tabs>
+                <RadzenTabsItem Text="2nd and 6th step">
+                    <RadzenCard Style="height: 70vh;">
+                        <RadzenText Text="Tall content. Notice On the 6th step, you'll notice a scrollbar appears." />
+                    </RadzenCard>
+                </RadzenTabsItem>
+                <RadzenTabsItem Text="3rd step">
+                    <RadzenCard Style="height: 40vh;">
+                        <RadzenText Text="Short content. Remain on this page while opening the nested dialog." />
+                    </RadzenCard>
+                </RadzenTabsItem>
+            </Tabs>
+        </RadzenTabs>
+    </RadzenCard>
+    );
+    }
+
+    private async Task OpenNestedDialog()
+    {
+        await DialogService.OpenAsync("Nested", ds =>@<RadzenButton Click="(_) => ds.Close()" Text="(5th step) Close nested" />);
+    }
+}
